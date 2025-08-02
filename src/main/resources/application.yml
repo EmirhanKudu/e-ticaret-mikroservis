@@ -14,5 +14,5 @@ spring:
     name: e-ticaret-kullanici
 
 jwt:
-  secret: mysecret-key-u-cannot-know-mete-
+  secret: mysecretkeyucannotknowmetedayisimysecretkeyucannotknowmetedayisi
   expiration: 86400000

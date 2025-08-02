@@ -28,6 +28,13 @@ public class UserService implements UserDetailsService {
     public Optional<UserEntity> getUserById(long id) {
         return userRepository.findById(id);
     }
+    public Optional<UserEntity> getUserByUserName(String userName) {
+        return userRepository.findByUsername(userName);
+    }
+    public void save(UserEntity user) {
+        userRepository.save(user);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
