@@ -14,6 +14,6 @@ public class UserController {
     }
     @GetMapping("/dashboard")
     public String dashboard() {
-        return "Login başarılı - dashboard sayfası";
+        return "Login başarılı - dashboard sayfası!";
     }
 }
