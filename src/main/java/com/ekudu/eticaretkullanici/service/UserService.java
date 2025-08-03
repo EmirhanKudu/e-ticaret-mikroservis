@@ -1,4 +1,5 @@
 package com.ekudu.eticaretkullanici.service;
+import com.ekudu.eticaretkullanici.dto.RegisterRequest;
 import com.ekudu.eticaretkullanici.model.UserEntity;
 import com.ekudu.eticaretkullanici.repository.UserRepository;
 import com.ekudu.eticaretkullanici.service.UserService;
@@ -7,6 +8,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,9 +23,25 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    public UserEntity createUser(UserEntity user) {
-        return userRepository.save(user);
+    public String registerUser(RegisterRequest registerRequest, PasswordEncoder passwordEncoder) {
+        Optional<UserEntity> existingUser = userRepository.findByUsername(registerRequest.getUsername());
+
+        if (existingUser.isPresent()) {
+            throw new RuntimeException("Bu kullanıcı adı zaten kayıtlı!");
+        }
+
+        UserEntity user = new UserEntity();
+        user.setUsername(registerRequest.getUsername());
+        user.setEmail(registerRequest.getEmail());
+        user.setPhoneNumber(registerRequest.getPhoneNumber());
+        user.setRole("USER");
+        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+
+        userRepository.save(user);
+
+        return "Kullanıcı başarıyla oluşturuldu.";
     }
+
 
     public Optional<UserEntity> getUserById(long id) {
         return userRepository.findById(id);
@@ -31,9 +49,7 @@ public class UserService implements UserDetailsService {
     public Optional<UserEntity> getUserByUserName(String userName) {
         return userRepository.findByUsername(userName);
     }
-    public void save(UserEntity user) {
-        userRepository.save(user);
-    }
+
 
 
     @Override

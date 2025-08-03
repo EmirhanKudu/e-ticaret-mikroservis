@@ -56,22 +56,8 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
-
-        Optional<UserEntity> userByUserName = userService.getUserByUserName(registerRequest.getUsername());
-        if (userByUserName.isPresent()) {
-            new RuntimeException("Boyle bir kullanici zaten kayitli ");
-        }
-
-
-        UserEntity user = new UserEntity();
-        user.setUsername(registerRequest.getUsername());
-        user.setEmail(registerRequest.getEmail());
-        user.setPhoneNumber(registerRequest.getPhoneNumber());
-        user.setRole("USER");
-
-        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-
-        userService.save(user);
-        return ResponseEntity.ok("Kullanıcı başarıyla oluşturuldu");
+        String result = userService.registerUser(registerRequest, passwordEncoder);
+        return ResponseEntity.ok(result);
     }
+
 }
