@@ -10,7 +10,7 @@ public class UserController {
 
     @GetMapping("/index")
     public String index() {
-        return "Index Sayfası , Hos geldiniz!";
+        return "Index Sayfası , Hoş geldiniz!";
     }
     @GetMapping("/dashboard")
     public String dashboard() {
