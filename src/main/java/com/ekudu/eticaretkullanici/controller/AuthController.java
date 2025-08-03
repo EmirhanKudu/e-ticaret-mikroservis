@@ -46,7 +46,7 @@ public class AuthController {
 
 
         final Optional<UserEntity> userDetails = userService.getUserByUserName(loginRequest.getUsername());
-        UserEntity userEntity = userDetails.orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadi."));
+        UserEntity userEntity = userDetails.orElseThrow(() -> new RuntimeException("Kullanici bulunamadi."));
 
 
         final String token = jwtUtil.generateToken(userEntity);
