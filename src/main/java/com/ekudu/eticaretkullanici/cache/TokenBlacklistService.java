@@ -15,7 +15,7 @@ public class TokenBlacklistService {
     }
 
     /**
-     * Çıkış yapan token'ı blacklist'e ekler
+     * Çıkış yapan token'ı blacklist'e ekliyor
      * @param token JWT token stringi
      * @param ttl   Redis'te ne kadar süre saklanacak?
      */
