@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @EnableRabbit
 public class RabbitMQConfig {
 
-    public static final String USER_REG_QUEUE = "user.registration.queue"; // TODO burası neden static sorucam
+    public static final String USER_REG_QUEUE = "user.registration.queue";
 
 
     @Bean
