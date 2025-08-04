@@ -14,7 +14,7 @@ public class CartCacheService {
         this.redis = redis;
     }
 
-    /** @param id      UserEntity.id alanı */
+
     public void addToCart(Long id, String productId, int qty) {
         String key = "cart:" + id;
         redis.opsForHash().put(key, productId, String.valueOf(qty));
