@@ -1,10 +1,13 @@
 package com.ekudu.eticaretkullanici.controller;
 
+import com.ekudu.eticaretkullanici.cache.TokenBlacklistService;
 import com.ekudu.eticaretkullanici.dto.LoginRequest;
 import com.ekudu.eticaretkullanici.dto.RegisterRequest;
+import com.ekudu.eticaretkullanici.messaging.UserRegistrationProducer;
 import com.ekudu.eticaretkullanici.model.UserEntity;
 import com.ekudu.eticaretkullanici.security.JwtUtil;
 import com.ekudu.eticaretkullanici.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.util.Optional;
 
 @RestController
@@ -21,6 +25,12 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserRegistrationProducer producer;
+
+    @Autowired
+    private TokenBlacklistService tokenBlacklistService;
 
     @Autowired
     private UserService userService;
@@ -55,9 +65,21 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
-        String result = userService.registerUser(registerRequest, passwordEncoder);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<String> register(@RequestBody RegisterRequest req) {
+        UserEntity saved = userService.registerUser(req, passwordEncoder);
+        // RabbitMQ publish:
+        producer.publishNewUser(saved.getId(), saved.getUsername());
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body("Kullanıcı başarıyla oluşturuldu.");
     }
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest req) {
+        String token = req.getHeader("Authorization").substring(7);
+        tokenBlacklistService.blacklistToken(token, Duration.ofHours(1));
+        return ResponseEntity.ok("Logged out");
+    }
+
+
 
 }

@@ -23,23 +23,18 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    public String registerUser(RegisterRequest registerRequest, PasswordEncoder passwordEncoder) {
-        Optional<UserEntity> existingUser = userRepository.findByUsername(registerRequest.getUsername());
-
-        if (existingUser.isPresent()) {
-            throw new RuntimeException("Bu kullanıcı adı zaten kayıtlı!");
-        }
+    public UserEntity registerUser(RegisterRequest req, PasswordEncoder encoder) {
+        userRepository.findByUsername(req.getUsername())
+                .ifPresent(u -> { throw new RuntimeException("Bu kullanıcı adı zaten kayıtlı!"); });
 
         UserEntity user = new UserEntity();
-        user.setUsername(registerRequest.getUsername());
-        user.setEmail(registerRequest.getEmail());
-        user.setPhoneNumber(registerRequest.getPhoneNumber());
+        user.setUsername(req.getUsername());
+        user.setEmail(req.getEmail());
+        user.setPhoneNumber(req.getPhoneNumber());
         user.setRole("USER");
-        user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setPassword(encoder.encode(req.getPassword()));
 
-        userRepository.save(user);
-
-        return "Kullanıcı başarıyla oluşturuldu.";
+        return userRepository.save(user);   // artık entity dönüyor
     }
 
 
