@@ -12,6 +12,16 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   application:
     name: e-ticaret-kullanici
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
 
 jwt:
   secret: mysecretkeyucannotknowmetedayisimysecretkeyucannotknowmetedayisi
