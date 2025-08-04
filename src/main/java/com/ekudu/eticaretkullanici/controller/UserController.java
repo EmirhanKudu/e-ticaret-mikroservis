@@ -33,6 +33,6 @@ public class UserController {
     @GetMapping("/get-card")
     public String getCard() {
         Map<Object, Object> cart = cartCacheService.getCart(1L);
-        return "Add Card";
+        return "Get Card";
     }
 }
