@@ -65,7 +65,6 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest req) {
         UserEntity saved = userService.registerUser(req, passwordEncoder);
-        // RabbitMQ publish:
         producer.publishNewUser(saved.getId(), saved.getUsername());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
