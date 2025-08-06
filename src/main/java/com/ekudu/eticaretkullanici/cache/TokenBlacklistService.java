@@ -14,11 +14,7 @@ public class TokenBlacklistService {
         this.redis = redis;
     }
 
-    /**
-     * Çıkış yapan token'ı blacklist'e ekliyor
-     * @param token JWT token stringi
-     * @param ttl   Redis'te ne kadar süre saklanacak?
-     */
+
     public void blacklistToken(String token, Duration ttl) {
         redis.opsForValue().set(token, "BLACKLISTED", ttl);
     }
