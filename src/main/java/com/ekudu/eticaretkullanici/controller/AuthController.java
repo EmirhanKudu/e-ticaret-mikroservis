@@ -42,6 +42,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest loginRequest) {
+
+        final Optional<UserEntity> userDetails = userService.getUserByUserName(loginRequest.getUsername());
+        UserEntity userEntity = userDetails.orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı."));
+
         try {
 
             authenticationManager.authenticate(
@@ -53,12 +57,6 @@ public class AuthController {
         } catch (BadCredentialsException e) {
             throw new RuntimeException("Kullanıcı adı veya şifre hatalı.");
         }
-
-
-        final Optional<UserEntity> userDetails = userService.getUserByUserName(loginRequest.getUsername());
-        UserEntity userEntity = userDetails.orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı."));
-
-
         final String token = jwtUtil.generateToken(userEntity);
 
         return token;
