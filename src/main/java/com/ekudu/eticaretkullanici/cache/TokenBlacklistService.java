@@ -19,7 +19,6 @@ public class TokenBlacklistService {
         redis.opsForValue().set(token, "BLACKLISTED", ttl);
     }
 
-    /** Token blacklist'te mi? */
     public boolean isBlacklisted(String token) {
         return redis.hasKey(token);
     }
