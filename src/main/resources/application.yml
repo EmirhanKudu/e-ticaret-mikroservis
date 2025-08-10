@@ -26,3 +26,4 @@ spring:
 jwt:
   secret: mysecretkeyucannotknowmetedayisimysecretkeyucannotknowmetedayisi
   expiration: 86400000
+  refreshExpiration: 2592000000
