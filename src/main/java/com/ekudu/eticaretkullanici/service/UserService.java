@@ -1,10 +1,8 @@
 package com.ekudu.eticaretkullanici.service;
-import com.ekudu.eticaretkullanici.dto.RegisterRequest;
+import com.ekudu.eticaretkullanici.dto.RegisterRequestDto;
 import com.ekudu.eticaretkullanici.model.UserEntity;
 import com.ekudu.eticaretkullanici.repository.UserRepository;
-import com.ekudu.eticaretkullanici.service.UserService;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,7 +21,7 @@ public class UserService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
-    public UserEntity registerUser(RegisterRequest req, PasswordEncoder encoder) {
+    public UserEntity registerUser(RegisterRequestDto req, PasswordEncoder encoder) {
         userRepository.findByUsername(req.getUsername())
                 .ifPresent(u -> { throw new RuntimeException("Bu kullanıcı adı zaten kayıtlı!"); });
 
