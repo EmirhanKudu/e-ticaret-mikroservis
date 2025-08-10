@@ -20,6 +20,10 @@ public class JwtUtil {
     @Value("${jwt.expiration}")
     private long timeout;
 
+    @Value("${jwt.refreshExpiration}")
+    private long refreshTimeout; // ms
+
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
