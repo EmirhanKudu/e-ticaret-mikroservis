@@ -20,12 +20,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ProductResponseDto createProduct(ProductRequestDto dto) {
-    ProductEntity entity = ProductEntity.builder()
-            .title(dto.getTitle())
-            .price(dto.getPrice())
-            .description(dto.getDescription())
-            .stock(dto.getStock()).build();
-    ProductEntity saved = repo.save(entity);
+        ProductEntity entity = ProductEntity.builder()
+                .title(dto.getTitle())
+                .price(dto.getPrice())
+                .description(dto.getDescription())
+                .stock(dto.getStock()).build();
+        ProductEntity saved = repo.save(entity);
         ProductResponseDto productResponseDto = new ProductResponseDto();
         productResponseDto.setId(saved.getId());
         productResponseDto.setTitle(saved.getTitle());
@@ -36,20 +36,24 @@ public class ProductServiceImpl implements ProductService {
         return productResponseDto;
     }
 
+    @Transactional
     @Override
-    public ProductResponseDto updateProduct(ProductRequestDto dto) {
-        return null;
+    public ProductResponseDto updateProduct(Long id, ProductRequestDto dto) {
+        ProductEntity existing = repo.findById(id).orElseThrow(()-> new RuntimeException("Ürün bulunamadı!"));
+        existing.setTitle(dto.getTitle());
+        existing.setPrice(dto.getPrice());
+        existing.setDescription(dto.getDescription());
+        existing.setStock(dto.getStock());
+        ProductEntity saved = repo.save(existing);
+        ProductResponseDto productResponseDto = new ProductResponseDto();
+        productResponseDto.setTitle(saved.getTitle());
+        productResponseDto.setPrice(saved.getPrice());
+        productResponseDto.setDescription(saved.getDescription());
+        productResponseDto.setStock(saved.getStock());
+        return productResponseDto;
     }
 
-    @Override
-    public ProductResponseDto partialUpdateProduct(ProductRequestDto dto) {
-        return null;
-    }
 
-    @Override
-    public ProductResponseDto getProductById(long id) {
-        return null;
-    }
 
     @Override
     public List<ProductResponseDto> listAll() {
@@ -57,8 +61,31 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void deleteProduct(long id) {
+    public void deleteProduct(Long id) {
 
     }
 
+    @Override
+    public ProductResponseDto getProductById(Long id) {
+        ProductEntity entity = repo.findById(id).orElseThrow(() -> new RuntimeException("Ürün bulunamadı!"));
+        ProductResponseDto productResponseDto = new  ProductResponseDto();
+        productResponseDto.setId(entity.getId());
+        productResponseDto.setTitle(entity.getTitle());
+        productResponseDto.setPrice(entity.getPrice());
+        productResponseDto.setDescription(entity.getDescription());
+        productResponseDto.setStock(entity.getStock());
+        return productResponseDto;
+
+    }
+
+
+
+
 }
+
+
+
+
+
+
+
