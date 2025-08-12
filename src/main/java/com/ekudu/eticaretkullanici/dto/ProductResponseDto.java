@@ -1,7 +1,7 @@
 package com.ekudu.eticaretkullanici.dto;
 
+import lombok.Builder;
 import lombok.Data;
-
 @Data
 public class ProductResponseDto {
      private long id;
