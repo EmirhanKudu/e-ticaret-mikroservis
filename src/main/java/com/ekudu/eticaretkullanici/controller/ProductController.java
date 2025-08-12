@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/products")
 @Validated
@@ -29,4 +31,20 @@ public class ProductController {
         ProductResponseDto info = productService.getProductById(id);
         return ResponseEntity.status(200).body(info);
     }
+    @GetMapping("/get-all")
+    public ResponseEntity<List<ProductResponseDto>> getAllProducts() {
+        List<ProductResponseDto> getAllProducts = productService.listAll();
+        return ResponseEntity.status(200).body(getAllProducts);
+    }
+    @PostMapping("/delete")
+    public ResponseEntity<ProductResponseDto> deleteProduct(@RequestParam("id") Long id) {
+        ProductResponseDto deletedProduct = productService.getProductById(id);
+        productService.deleteProduct(id);
+        return ResponseEntity.ok(deletedProduct);
+
+    }
+
+
+
+
 }

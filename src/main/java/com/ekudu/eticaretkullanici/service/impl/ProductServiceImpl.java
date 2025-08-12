@@ -9,6 +9,7 @@ import com.ekudu.eticaretkullanici.service.ProductService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -57,11 +58,28 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductResponseDto> listAll() {
-        return List.of();
+        List<ProductEntity> products = repo.findAll();
+        List<ProductResponseDto> productResponseDtos = new ArrayList<>();
+
+        for (ProductEntity entity  : products) {
+            ProductResponseDto dto = new ProductResponseDto();
+            dto.setId(entity.getId());
+            dto.setTitle(entity.getTitle());
+            dto.setPrice(entity.getPrice());
+            dto.setDescription(entity.getDescription());
+            dto.setStock(entity.getStock());
+            productResponseDtos.add(dto);
+        }
+        return productResponseDtos;
     }
 
     @Override
+    @Transactional
     public void deleteProduct(Long id) {
+        if (repo.existsById(id)) {
+            throw new RuntimeException("Ürün bulunamadı!");
+        }
+        repo.deleteById(id);
 
     }
 
@@ -77,6 +95,7 @@ public class ProductServiceImpl implements ProductService {
         return productResponseDto;
 
     }
+
 
 
 
