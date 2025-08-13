@@ -36,7 +36,9 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public Optional<UserEntity> getUserById(long id) {
+    public Optional<UserEntity> getUserById(Long id) {
+
+
         return userRepository.findById(id);
     }
     public Optional<UserEntity> getUserByUserName(String userName) {
