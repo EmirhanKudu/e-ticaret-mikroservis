@@ -40,10 +40,10 @@ public class UserController {
         return "Get Card";
     }
 
-    @GetMapping("/info")
-    public ResponseEntity<UserEntity> userInfo() {
-        return userService.getUserById(1)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+//    @GetMapping("/info")
+//    public ResponseEntity<UserEntity> userInfo() {
+//        return userService.getUserById(1)
+//                .map(ResponseEntity::ok)
+//                .orElse(ResponseEntity.notFound().build());
+//    }
 }
