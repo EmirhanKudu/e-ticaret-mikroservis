@@ -36,7 +36,7 @@ public class ProductController {
         List<ProductResponseDto> getAllProducts = productService.listAll();
         return ResponseEntity.status(200).body(getAllProducts);
     }
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<ProductResponseDto> deleteProduct(@RequestParam("id") Long id) {
         ProductResponseDto deletedProduct = productService.getProductById(id);
         productService.deleteProduct(id);
