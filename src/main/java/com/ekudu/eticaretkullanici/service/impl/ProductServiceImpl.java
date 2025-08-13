@@ -76,7 +76,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void deleteProduct(Long id) {
-        if (repo.existsById(id)) {
+        if (!repo.existsById(id)) {
             throw new RuntimeException("Ürün bulunamadı!");
         }
         repo.deleteById(id);
