@@ -4,6 +4,7 @@ package com.ekudu.eticaretkullanici.controller;
 import com.ekudu.eticaretkullanici.dto.ProductRequestDto;
 import com.ekudu.eticaretkullanici.dto.ProductResponseDto;
 import com.ekudu.eticaretkullanici.service.ProductService;
+import jakarta.persistence.Id;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -43,6 +44,15 @@ public class ProductController {
         return ResponseEntity.ok(deletedProduct);
 
     }
+    @PutMapping("/update")
+    public ResponseEntity<ProductResponseDto> updateProduct(@RequestParam Long id, @Valid @RequestBody ProductRequestDto dto) {
+
+        ProductResponseDto updated = productService.updateProduct(id, dto);
+        return ResponseEntity.ok(updated);
+    }
+
+
+
 
 
 
