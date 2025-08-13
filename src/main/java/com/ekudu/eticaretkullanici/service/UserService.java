@@ -1,13 +1,16 @@
 package com.ekudu.eticaretkullanici.service;
 import com.ekudu.eticaretkullanici.dto.RegisterRequestDto;
+import com.ekudu.eticaretkullanici.dto.UserResponseDto;
 import com.ekudu.eticaretkullanici.model.UserEntity;
 import com.ekudu.eticaretkullanici.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,11 +39,22 @@ public class UserService implements UserDetailsService {
     }
 
 
-    public Optional<UserEntity> getUserById(Long id) {
-
-
-        return userRepository.findById(id);
+    public UserResponseDto getUserById(Long id) {
+    Optional <UserEntity> user = userRepository.findById(id);
+        UserResponseDto userResponseDto = new UserResponseDto();
+    if (user.isPresent()) {
+        UserEntity userEntity = user.get();
+        userResponseDto.setId(userEntity.getId());
+        userResponseDto.setUsername(userEntity.getUsername());
+        userResponseDto.setEmail(userEntity.getEmail());
+        userResponseDto.setPhoneNumber(userEntity.getPhoneNumber());
     }
+    else  {
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Kullanıcı bulunamadı");
+    }
+    return userResponseDto;
+    }
+
     public Optional<UserEntity> getUserByUserName(String userName) {
         return userRepository.findByUsername(userName);
     }
@@ -56,6 +70,7 @@ public class UserService implements UserDetailsService {
                 List.of(new SimpleGrantedAuthority(user.getRole()))
         );
     }
+
 }
 
 
