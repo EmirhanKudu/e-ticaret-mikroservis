@@ -95,6 +95,11 @@ public class ProductServiceImpl implements ProductService {
         return productResponseDto;
 
     }
+    @Override
+    public ProductEntity getProdById(Long id){
+        ProductEntity entity = repo.findById(id).orElseThrow(() -> new RuntimeException("Ürün bulunamadı!"));
+        return entity;
+    }
 
 
 
