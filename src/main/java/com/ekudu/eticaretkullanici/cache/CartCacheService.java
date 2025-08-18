@@ -16,7 +16,7 @@ public class CartCacheService {
 
 
     public void addToCart(Long id, String productId, int qty) {
-        String key = "cart:" + id;
+        String key = "cart:" + id; //sepetin kime ait oldugu bilgisi
         redis.opsForHash().put(key, productId, String.valueOf(qty));
     }
 

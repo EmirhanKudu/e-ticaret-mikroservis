@@ -27,13 +27,13 @@ public class UserController {
         return "Login başarılı - dashboard sayfası!";
     }
 
-    @GetMapping("/add-card")
+    @GetMapping("/add-cart")
     public String addCard() {
         cartCacheService.addToCart(1L, "URUN", 1);
         return "Add Card";
     }
 
-    @GetMapping("/get-card")
+    @GetMapping("/get-cart")
     public String getCard() {
         //Map<Object, Object> cart = cartCacheService.getCart(1L);
         return "Get Card";
