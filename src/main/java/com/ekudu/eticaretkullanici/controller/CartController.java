@@ -2,13 +2,14 @@ package com.ekudu.eticaretkullanici.controller;
 
 import com.ekudu.eticaretkullanici.dto.AddCartRequestDto;
 import com.ekudu.eticaretkullanici.dto.AddCartResponseDto;
+import com.ekudu.eticaretkullanici.dto.CartAllProductDto;
+import com.ekudu.eticaretkullanici.dto.CartProductDto;
 import com.ekudu.eticaretkullanici.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/cart")
@@ -23,5 +24,18 @@ public class CartController {
 
         return ResponseEntity.ok(addCartResponseDto);
     }
+
+    @GetMapping("/get-cart")
+    public ResponseEntity<CartAllProductDto> getCart() {
+        CartAllProductDto cartAllProductDto =  cartService.getAllCart();
+        return ResponseEntity.ok(cartAllProductDto);
+    }
+
+    @GetMapping("/delete-cart")
+    public ResponseEntity<String> deleteCart() {
+        String message = cartService.clearAllCart();
+        return ResponseEntity.ok(message);
+    }
+
 
 }
