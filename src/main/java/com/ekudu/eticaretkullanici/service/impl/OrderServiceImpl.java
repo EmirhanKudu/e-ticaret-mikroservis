@@ -9,20 +9,16 @@ import com.ekudu.eticaretkullanici.model.ProductEntity;
 import com.ekudu.eticaretkullanici.model.UserEntity;
 import com.ekudu.eticaretkullanici.repository.OrderItemRepository;
 import com.ekudu.eticaretkullanici.repository.OrderRepository;
-import com.ekudu.eticaretkullanici.repository.UserRepository;
+import com.ekudu.eticaretkullanici.repository.ProductRepository;
 import com.ekudu.eticaretkullanici.service.OrderService;
 import com.ekudu.eticaretkullanici.service.ProductService;
 import com.ekudu.eticaretkullanici.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +30,7 @@ public class OrderServiceImpl implements OrderService {
     final PaymentClient paymentClient;
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
+    private final ProductRepository productRepository;
 
 
     @Override
@@ -81,9 +78,32 @@ public class OrderServiceImpl implements OrderService {
         orderResponseDto.setSuccess(true);
         orderResponseDto.setTotal(totalPrice);
 
-
-
-
         return orderResponseDto;
+    }
+
+    @Override
+    public OrderDto getOrder(Long orderId) {
+        Optional<OrderEntity> orderEntity = orderRepository.findById(orderId);
+        if(orderEntity.isEmpty()) {
+            throw new RuntimeException("Siparis bulunamadı!");
+        }
+        List <OrderItemEntity> orderItemList = orderItemRepository.findByOrderEntity(orderEntity.get());
+        OrderDto orderDto = new OrderDto();
+        List<OrderItemDto> orderItemDtoList = new ArrayList<>();
+        if(orderItemList.isEmpty()) {
+            throw new RuntimeException("Ürün bulunamadı!");
+
+        }
+        for(OrderItemEntity orderItemEntity : orderItemList) {
+            OrderItemDto orderItemDto = new OrderItemDto();
+            orderItemDto.setProductId(orderItemEntity.getProductEntity().getId());
+            orderItemDto.setProductName(orderItemEntity.getProductEntity().getTitle());
+            orderItemDto.setQuantity(orderItemEntity.getCount());
+            orderItemDtoList.add(orderItemDto);
+        }
+        orderDto.setOrderId(orderId);
+        orderDto.setOrderItemList(orderItemDtoList);
+
+        return orderDto;
     }
 }
