@@ -3,7 +3,8 @@ package com.ekudu.eticaretkullanici.cache;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
+
+import java.util.Map;
 
 @Service
 public class TokenBlacklistService {
@@ -14,12 +15,21 @@ public class TokenBlacklistService {
         this.redis = redis;
     }
 
-
-    public void blacklistToken(String token, Duration ttl) {
-        redis.opsForValue().set(token, "BLACKLISTED", ttl);
+    String key = "blacklist";
+    public void addBlackListRefreshToken(Long userId ,String refreshToken) {
+        redis.opsForHash().put(key, refreshToken ,userId);
     }
 
-    public boolean isBlacklisted(String token) {
-        return redis.hasKey(token);
+    public boolean isBlacklisted(String refreshToken) {
+        Map<Object,Object> map = redis.opsForHash().entries(key);
+        for (Map.Entry<Object, Object> entry : map.entrySet()) {
+            if(entry.getKey().toString().equals(refreshToken)){
+                return true;
+            }
+
+
+        }
+
+        return false;
     }
 }
