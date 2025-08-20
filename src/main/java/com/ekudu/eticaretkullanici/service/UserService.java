@@ -55,6 +55,13 @@ public class UserService implements UserDetailsService {
     return userResponseDto;
     }
 
+    public UserEntity getUserByAyd(Long id) {
+        Optional <UserEntity> user = userRepository.findById(id);
+
+
+        return user.get();
+    }
+
     public Optional<UserEntity> getUserByUserName(String userName) {
         return userRepository.findByUsername(userName);
     }
