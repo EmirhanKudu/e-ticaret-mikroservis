@@ -1,5 +1,6 @@
 package com.ekudu.eticaretkullanici.controller;
 
+import com.ekudu.eticaretkullanici.cache.RefreshingService;
 import com.ekudu.eticaretkullanici.cache.TokenBlacklistService;
 import com.ekudu.eticaretkullanici.dto.LoginRequestDto;
 import com.ekudu.eticaretkullanici.dto.LoginResponseDto;
@@ -13,10 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Duration;
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,6 +32,9 @@ public class AuthController {
 
     @Autowired
     private UserRegistrationProducer producer;
+
+    @Autowired
+    private RefreshingService refreshingService;
 
     @Autowired
     private TokenBlacklistService tokenBlacklistService;
@@ -60,6 +66,7 @@ public class AuthController {
         }
         final String token = jwtUtil.generateToken(userEntity);
         final String refreshToken = UUID.randomUUID().toString();
+        refreshingService.addRefreshToken(userDetails.get().getId(),refreshToken);
         LoginResponseDto loginResponseDto = new LoginResponseDto();
         loginResponseDto.setToken(token);
         loginResponseDto.setRefreshToken(refreshToken);
@@ -77,9 +84,28 @@ public class AuthController {
     }
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest req) {
-        String token = req.getHeader("Authorization").substring(7);
-        tokenBlacklistService.blacklistToken(token, Duration.ofHours(1));
-        return ResponseEntity.ok("Logged out");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<UserEntity> user = userService.getUserByUserName(username);
+        Long userId = user.get().getId();
+        tokenBlacklistService.addBlackListRefreshToken(userId,refreshingService.getRefreshTokenById(userId));
+        return ResponseEntity.ok("Çıkış yapıldı");
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity <LoginResponseDto> refreshJwtToken(@RequestParam String refreshToken) {
+        Long userId = refreshingService.getIdByRefreshToken(refreshToken);
+
+        if(tokenBlacklistService.isBlacklisted(refreshToken) ) {
+            throw new RuntimeException("Token blacklistte'dir!");
+        }
+
+        final UserEntity userDetails = userService.getUserByAyd(userId);
+        final String token = jwtUtil.generateToken(userDetails);
+        LoginResponseDto loginResponseDto = new LoginResponseDto();
+        loginResponseDto.setToken(token);
+        loginResponseDto.setRefreshToken(refreshToken);
+        return ResponseEntity.ok(loginResponseDto) ;
     }
 
 
