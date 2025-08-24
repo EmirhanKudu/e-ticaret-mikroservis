@@ -13,6 +13,6 @@ public class UserEntity {
     private Long phoneNumber;
     private String email;
     private String password;
-    private String role; //örn admin,user , buraya bakcam sonradan
+    private String role;
 
 }
