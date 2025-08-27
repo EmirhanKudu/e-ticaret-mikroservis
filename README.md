@@ -26,6 +26,7 @@ OpenFeign	Mikroservisler arası senkron iletişim
 Docker	Redis & RabbitMQ çalıştırmak için
 Lombok	Kodun daha sade olması için (DTO/Entity)
 🧩 Servisler ve Sorumluluklar
+
 👤 Kullanıcı Servisi
 
 Kullanıcı kayıt ve giriş
