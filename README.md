@@ -6,7 +6,7 @@ Redis, RabbitMQ ve JWT tabanlı authentication gibi modern teknolojiler kullanı
 
 🎯 Projenin Amacı
 
-Microservice mantığını öğrenmek: servisleri bağımsız sorumluluklarla bölmek
+Microservice mantığını uygulamak: servisleri bağımsız sorumluluklarla bölmek
 
 Gerçekçi senaryo uygulaması: ürün, sepet, sipariş ve ödeme süreçlerini uçtan uca kurmak
 
