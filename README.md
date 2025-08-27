@@ -15,16 +15,27 @@ Modern entegrasyonlar: Redis (cache & sepet), RabbitMQ , Feign Client (servisler
 Güvenli kimlik doğrulama: JWT + Refresh Token mimarisi
 
 ⚙️ Kullanılan Teknolojiler
-Teknoloji	Kullanım amacı
+
+Teknoloji	Kullanım amacı:
+
 Spring Boot	Mikroservis geliştirme altyapısı
+
 Spring Security + JWT	Kimlik doğrulama ve yetkilendirme
+
 Redis	Sepet verilerinin hızlı tutulması & token management
+
 RabbitMQ	Sipariş olaylarının publish edilmesi (event-driven yapı)
+
 Spring Data JPA (Hibernate)	Veritabanı işlemleri
+
 PostgreSQL	Ana veritabanı
+
 OpenFeign	Mikroservisler arası senkron iletişim
+
 Docker	Redis & RabbitMQ çalıştırmak için
+
 Lombok	Kodun daha sade olması için (DTO/Entity)
+
 🧩 Servisler ve Sorumluluklar
 
 👤 Kullanıcı Servisi
