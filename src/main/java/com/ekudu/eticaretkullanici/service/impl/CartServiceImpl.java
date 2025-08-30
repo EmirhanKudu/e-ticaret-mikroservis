@@ -30,7 +30,7 @@ public class CartServiceImpl implements CartService {
         String name = authentication.getName();
         Optional<UserEntity> user = userService.getUserByUserName(name);
         if(user.isEmpty()){
-            throw new RuntimeException("Kullanıcı bulunamadı");
+            throw new RuntimeException("Kullanıcı bulunamadı!");
         }
         Long userId = user.get().getId();
         cartCacheService.addToCart(userId,addCartRequestDto.getProductId().toString(),addCartRequestDto.getQuantity());
@@ -47,7 +47,7 @@ public class CartServiceImpl implements CartService {
         List<CartProductDto> cartProductDtoList = new ArrayList<>();
         Optional<UserEntity> user = userService.getUserByUserName(name);
         if(user.isEmpty()){
-            throw new RuntimeException("Kullanıcı bulunamadı");
+            throw new RuntimeException("Kullanıcı bulunamadı!");
         }
         Long userId = user.get().getId();
         Map<Object,Object> getCartMap = cartCacheService.getCart(userId);
@@ -76,11 +76,11 @@ public class CartServiceImpl implements CartService {
         String name = authentication.getName();
         Optional<UserEntity> user = userService.getUserByUserName(name);
         if(user.isEmpty()){
-            throw new RuntimeException("Kullanıcı bulunamadı");
+            throw new RuntimeException("Kullanıcı bulunamadı!");
         }
         Long userId = user.get().getId();
         cartCacheService.clearCart(userId);
-        return "Sepet boşaltıldı";
+        return "Sepet boşaltıldı!";
     }
 
 
